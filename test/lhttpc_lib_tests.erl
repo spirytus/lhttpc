@@ -76,6 +76,26 @@ parse_url_test_() ->
 
         ?_assertEqual(#lhttpc_url{
                          host = "host",
+                         port = 443,
+                         path = "/foo",
+                         is_ssl = true,
+                         user = "",
+                         password = ""
+                        },
+                      lhttpc_lib:parse_url("https://host/foo")),
+
+        ?_assertEqual(#lhttpc_url{
+                         host = "host",
+                         port = 443,
+                         path = "/foo/",
+                         is_ssl = true,
+                         user = "",
+                         password = ""
+                        },
+                      lhttpc_lib:parse_url("https://host/foo/")),
+
+        ?_assertEqual(#lhttpc_url{
+                         host = "host",
                          port = 180,
                          path = "/",
                          is_ssl = false,
@@ -174,6 +194,16 @@ parse_url_test_() ->
                          password = "erlang/otp"
                         },
                       lhttpc_lib:parse_url("http://joe%3aarm:erlang%2Fotp@host:180/foo/bar")),
+
+        ?_assertEqual(#lhttpc_url{
+                         host = "host",
+                         port = 80,
+                         path = "/foo?bar=joe@moose.nu",
+                         is_ssl = false,
+                         user = "",
+                         password = ""
+                        },
+                      lhttpc_lib:parse_url("http://host/foo?bar=joe@moose.nu")),
 
         ?_assertEqual(#lhttpc_url{
                          host = "::1",
