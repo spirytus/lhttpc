@@ -225,7 +225,9 @@ ensure_call(Pool, Pid, Host, Port, Ssl, Options) ->
                     case lhttpc:add_pool(Pool, ConnTimeout, PoolMaxSize) of
                         {ok, _Pid} ->
                             ensure_call(Pool, Pid, Host, Port, Ssl, Options);
-                        _ ->
+                       {error, already_exists} ->
+                            ensure_call(Pool, Pid, Host, Port, Ssl, Options);
+                       _ ->
                             %% Failed to create pool, exit as expected
                             exit({noproc, Reason})
                     end;
