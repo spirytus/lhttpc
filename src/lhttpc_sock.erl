@@ -68,7 +68,15 @@
 -spec connect(host(), integer(), socket_options(), timeout(), boolean()) ->
     {ok, socket()} | {error, atom()}.
 connect(Host, Port, Options, Timeout, true) ->
-    ssl:connect(Host, Port, Options, Timeout);
+    %% Server Name Indication is this:
+    %% https://en.wikipedia.org/wiki/Server_Name_Indication
+    %%
+    %% We inject this option here because as of OTP 20, the server name is
+    %% passed back as a return value so it can be validated by the client.
+    %% We want the previous behavior which ignored the server name
+    %% indicator, so disable this.  I believe this option has existed
+    %% since R16.
+    ssl:connect(Host, Port, [ {server_name_indication, disable} | Options ], Timeout);
 connect(Host, Port, Options, Timeout, false) ->
     gen_tcp:connect(Host, Port, Options, Timeout).
 
