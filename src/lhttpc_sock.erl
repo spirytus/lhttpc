@@ -76,7 +76,7 @@ connect(Host, Port, Options, Timeout, true) ->
     %% We want the previous behavior which ignored the server name
     %% indicator, so disable this.  I believe this option has existed
     %% since R16.
-    ssl:connect(Host, Port, [ {server_name_indication, disable} | Options ], Timeout);
+    ssl:connect(Host, Port, [ {server_name_indication, Host} | Options ], Timeout);
 connect(Host, Port, Options, Timeout, false) ->
     gen_tcp:connect(Host, Port, Options, Timeout).
 
