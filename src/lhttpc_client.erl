@@ -464,6 +464,10 @@ read_response(State, Vsn, {StatusCode, _} = Status, Hdrs) ->
             send_request(NewState);
         {ok, {http_error, _} = Reason} ->
             erlang:error(Reason);
+        {error, emsgsize} = E ->
+            error_logger:error_msg("emsgzise error on reading response: ~n State: ~p~n Vsn: ~p~n Headers: ~p~n SSL: ~p~n Socket: ~p~n, ~p",
+                                   [State, Vsn, Status, Hdrs, Ssl, Socket, erlang:get_stacktrace()]),
+            E;
         {error, Reason} ->
             erlang:error(Reason)
     end.
